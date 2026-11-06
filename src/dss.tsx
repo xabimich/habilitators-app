@@ -87,9 +87,20 @@ export function Input({
   )
 }
 
+// Grows to fit its content (DSS autoHeight). The component only resizes on typing and first render,
+// so also resize when the value is set from outside or the element becomes visible (e.g. drawer opening).
 export function Textarea({ onChange, rows = 3, size = 'md', ...rest }: FieldProps & { rows?: number }) {
   const ref = useListener('input', (e) => onChange(valueOf(e)))
-  return <dss-textarea ref={ref} rows={rows} size={size} {...rest} />
+  useEffect(() => {
+    const el = ref.current as (HTMLElement & { updateComplete?: Promise<unknown>; _updateHeight?: () => void }) | null
+    if (!el) return
+    const resize = () => el.updateComplete?.then(() => el._updateHeight?.())
+    resize()
+    const ro = new ResizeObserver(resize)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [ref, rest.value])
+  return <dss-textarea ref={ref} rows={rows} size={size} autoHeight {...rest} />
 }
 
 export type Option = { label: string; value: string }

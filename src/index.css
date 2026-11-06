@@ -189,18 +189,6 @@ body {
   color: var(--layer);
 }
 
-.legend {
-  padding: var(--dss-spacing-xs) var(--dss-spacing-sm);
-  background: var(--color-white);
-  border-radius: var(--dss-radius-xs);
-}
-
-.legend div {
-  display: flex;
-  align-items: center;
-  gap: var(--dss-spacing-xs);
-}
-
 /* ---------- login ---------- */
 
 .login {

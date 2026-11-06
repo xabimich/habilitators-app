@@ -5,7 +5,6 @@ import {
   Controls,
   Handle,
   MarkerType,
-  Panel,
   Position,
   type BuiltInEdge,
   type Node,
@@ -13,7 +12,7 @@ import {
 } from '@xyflow/react'
 import dagre from 'dagre'
 import '@xyflow/react/dist/style.css'
-import { kindLabel, statusLabel, TYPES, type Habilitator, type Relation } from './client'
+import { statusLabel, TYPES, type Habilitator, type Relation } from './client'
 
 const NODE_W = 180
 const NODE_H = 64
@@ -177,7 +176,7 @@ type Props = {
 }
 
 export default function Canvas({ habilitators, relations, selectedId, onSelect, onDeleteRelation }: Props) {
-  const { nodes, edges, kinds } = useMemo(() => {
+  const { nodes, edges } = useMemo(() => {
     const ids = new Set(habilitators.map((h) => h.id))
     const visible = relations.filter((r) => ids.has(r.sourceId) && ids.has(r.targetId))
 
@@ -220,7 +219,6 @@ export default function Canvas({ habilitators, relations, selectedId, onSelect, 
     return {
       nodes: [...layout.bands, ...cards] as Node[],
       edges,
-      kinds: [...new Set(visible.map((r) => r.kind))].sort(),
     }
   }, [habilitators, relations, selectedId])
 
@@ -239,21 +237,6 @@ export default function Canvas({ habilitators, relations, selectedId, onSelect, 
     >
       <Background />
       <Controls showInteractive={false} />
-      {kinds.length > 0 && (
-        <Panel position="top-right" className="legend dss-elevation--sm dss-body--sm">
-          {kinds.map((k) => {
-            const s = KIND_STYLE[k] ?? OTHER_KIND
-            return (
-              <div key={k}>
-                <svg width="32" height="8" aria-hidden>
-                  <line x1="0" y1="4" x2="32" y2="4" stroke={s.stroke} strokeWidth="2" strokeDasharray={s.dash} />
-                </svg>
-                {kindLabel(k)}
-              </div>
-            )
-          })}
-        </Panel>
-      )}
     </ReactFlow>
   )
 }
