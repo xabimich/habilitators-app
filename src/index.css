@@ -1,0 +1,243 @@
+/* Tokens, fonts and typography come from the Salut design system (imported in src/dss.tsx). */
+
+body {
+  margin: 0;
+  background: var(--color-neutral-50);
+}
+
+/* ---------- shell ---------- */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Below the full-width dss-header. */
+.content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--dss-spacing-lg);
+}
+
+.toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--dss-spacing-md);
+  padding: var(--dss-spacing-md) 0;
+}
+
+.filters,
+.actions,
+.row,
+.chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--dss-spacing-xs);
+}
+
+.filters dss-select {
+  width: 200px;
+}
+
+.row > dss-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.actions[slot] {
+  justify-content: flex-end;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dss-spacing-md);
+}
+
+.form section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dss-spacing-xs);
+}
+
+.form section p {
+  margin: 0;
+}
+
+/* ---------- canvas ---------- */
+
+.canvas {
+  flex: 1;
+  min-height: 0;
+  margin-bottom: var(--dss-spacing-lg);
+  background: var(--color-white);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--dss-radius-sm);
+  overflow: hidden;
+}
+
+.empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.empty p {
+  margin: 0;
+}
+
+/* Layer colours: card accent and band tint. */
+.layer-application { --layer: var(--color-purple-500); --layer-bg: var(--color-purple-50); }
+.layer-enabler { --layer: var(--color-primary-500); --layer-bg: var(--color-primary-50); }
+.layer-data { --layer: var(--color-green-600); --layer-bg: var(--color-green-50); }
+.layer-tool { --layer: var(--color-neutral-500); --layer-bg: var(--color-neutral-50); }
+
+.card {
+  box-sizing: border-box;
+  width: 180px;
+  height: 64px;
+  padding: var(--dss-spacing-xxs) var(--dss-spacing-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-white);
+  color: var(--color-neutral-900);
+  border: 1px solid var(--color-neutral-200);
+  border-left: 5px solid var(--layer);
+  border-radius: var(--dss-radius-xs);
+  box-shadow: var(--dss-elevation-sm);
+  cursor: pointer;
+}
+
+.card > span,
+.card small {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card small {
+  display: flex;
+  align-items: center;
+  gap: var(--dss-spacing-xxs);
+  font-size: 12px;
+  color: var(--color-neutral-500);
+}
+
+/* Status on the card: a coloured dot before the label. */
+.card .status::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--status, transparent);
+  border: 1px solid var(--status, var(--color-neutral-300));
+}
+
+.status-conceptualization { --status: var(--color-purple-300); }
+.status-development { --status: var(--color-orange-500); }
+.status-pre { --status: var(--color-primary-400); }
+.status-pro { --status: var(--color-green-600); }
+.status-none { font-style: italic; }
+
+.card.selected {
+  border-color: var(--color-primary-500);
+  border-left-color: var(--layer);
+  box-shadow: 0 0 0 2px var(--color-primary-500);
+}
+
+.card .react-flow__handle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.band {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: var(--dss-spacing-xxs) var(--dss-spacing-sm);
+  background: var(--layer-bg);
+  border: 1px dashed var(--layer);
+  border-radius: var(--dss-radius-sm);
+  pointer-events: none;
+}
+
+/* Layer bands: title in a left column, vertically centred, clear of the edges. */
+.band:not(.band--column) {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.band span {
+  box-sizing: border-box;
+  padding: 0 var(--dss-spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  color: var(--layer);
+}
+
+.legend {
+  padding: var(--dss-spacing-xs) var(--dss-spacing-sm);
+  background: var(--color-white);
+  border-radius: var(--dss-radius-xs);
+}
+
+.legend div {
+  display: flex;
+  align-items: center;
+  gap: var(--dss-spacing-xs);
+}
+
+/* ---------- login ---------- */
+
+.login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--dss-spacing-md);
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dss-spacing-md);
+  padding: var(--dss-spacing-xl);
+  background: var(--color-white);
+  border-radius: var(--dss-radius-md);
+}
+
+.login-card p {
+  margin: 0;
+}
+
+.login-card > dss-button {
+  align-self: center;
+}
+
+.login-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--dss-spacing-xxs);
+}
+
+.login-links:empty {
+  display: none;
+}
