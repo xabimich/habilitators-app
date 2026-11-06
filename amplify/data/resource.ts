@@ -11,6 +11,7 @@ const schema = a.schema({
       status: a.enum(['conceptualization', 'development', 'pre', 'pro']),
       description: a.string(),
       attributes: a.json(),
+      updatedBy: a.string(), // name (or email) of the last user who created or saved it; set by the app
     })
     .authorization((allow) => [allow.authenticated()]),
 

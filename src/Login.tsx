@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Hub } from 'aws-amplify/utils'
 import { confirmResetPassword, confirmSignIn, getCurrentUser, resetPassword, signIn } from 'aws-amplify/auth'
-import { Alert, Button, Input, Link } from './dss'
+import { Button, Input, Link } from './dss'
+import { showToast } from './toast'
 import App from './App'
 
 // Shows the login form until Cognito has a session, then the app.
@@ -33,25 +34,20 @@ function Login() {
   const [password, setPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [code, setCode] = useState('')
-  const [error, setError] = useState('')
-  const [info, setInfo] = useState('')
   const [busy, setBusy] = useState(false)
 
   function go(next: Step) {
     setStep(next)
-    setError('')
-    setInfo('')
     setNewPassword('')
     setCode('')
   }
 
   async function run(action: () => Promise<void>) {
-    setError('')
     setBusy(true)
     try {
       await action()
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e))
+      showToast(e instanceof Error ? e.message : String(e), 'error')
     } finally {
       setBusy(false)
     }
@@ -59,7 +55,7 @@ function Login() {
 
   function handleSignInStep(signInStep: string) {
     if (signInStep === 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED') go('newPassword')
-    else if (signInStep !== 'DONE') setError(`Pas d'inici de sessió no suportat: ${signInStep}`)
+    else if (signInStep !== 'DONE') showToast(`Pas d'inici de sessió no suportat: ${signInStep}`, 'error')
     // DONE: the auth listener (AuthGate) switches to the app.
   }
 
@@ -77,7 +73,7 @@ function Login() {
       run(async () => {
         await resetPassword({ username })
         go('resetCode')
-        setInfo(`T'hem enviat un codi a ${username}.`)
+        showToast(`T'hem enviat un codi a ${username}.`, 'info')
       }),
     resetCode: () =>
       code &&
@@ -86,7 +82,7 @@ function Login() {
         await confirmResetPassword({ username, confirmationCode: code.trim(), newPassword })
         go('signIn')
         setPassword('')
-        setInfo('Contrasenya canviada. Ja pots iniciar la sessió.')
+        showToast('Contrasenya canviada. Ja pots iniciar la sessió.')
       }),
   }
   const submit = actions[step]
@@ -146,8 +142,6 @@ function Login() {
           </>
         )}
 
-        {info && <Alert status="success" message={info} />}
-        {error && <Alert status="error" message={error} />}
         <Button label={buttonLabel[step]} onClick={submit} loading={busy} />
 
         <div className="login-links">

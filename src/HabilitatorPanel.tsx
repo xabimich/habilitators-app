@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { client, STATUSES, TYPES, type Habilitator, type Status } from './client'
 import { Alert, Button, Chip, Drawer, IconButton, Input, Select, Textarea, type Option } from './dss'
+import { showToast } from './toast'
 
 type Props = {
   habilitator: Habilitator
   knownContacts: string[]
+  editor: string // current user, stored as updatedBy on save
   onClose: () => void
   onDelete: () => void
 }
@@ -24,7 +26,7 @@ function parseAttributes(raw: unknown): [string, string][] {
 }
 
 // Remount with key={habilitator.id} so the draft resets when the selection changes.
-export default function HabilitatorPanel({ habilitator, knownContacts, onClose, onDelete }: Props) {
+export default function HabilitatorPanel({ habilitator, knownContacts, editor, onClose, onDelete }: Props) {
   const [name, setName] = useState(habilitator.name)
   const [shortName, setShortName] = useState(habilitator.shortName ?? '')
   const [type, setType] = useState(habilitator.type ?? '')
@@ -35,7 +37,6 @@ export default function HabilitatorPanel({ habilitator, knownContacts, onClose, 
   )
   const [contactInput, setContactInput] = useState('')
   const [attributes, setAttributes] = useState(() => parseAttributes(habilitator.attributes))
-  const [message, setMessage] = useState<{ status: 'success' | 'error'; text: string } | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [saving, setSaving] = useState(false)
 
@@ -65,12 +66,13 @@ export default function HabilitatorPanel({ habilitator, knownContacts, onClose, 
   }
 
   async function save() {
-    if (!name.trim()) return setMessage({ status: 'error', text: 'El nom és obligatori.' })
+    if (!name.trim()) return showToast('El nom és obligatori.', 'error')
     setSaving(true)
     const { errors } = await client.models.Habilitator.update({
       id: habilitator.id,
       name: name.trim(),
       shortName: shortName.trim() || null,
+      updatedBy: editor,
       type: type || null,
       status: status || null,
       description: description.trim() || null,
@@ -80,11 +82,8 @@ export default function HabilitatorPanel({ habilitator, knownContacts, onClose, 
       ),
     })
     setSaving(false)
-    setMessage(
-      errors
-        ? { status: 'error', text: errors.map((e) => e.message).join(', ') }
-        : { status: 'success', text: 'Canvis desats.' },
-    )
+    if (errors) showToast(errors.map((e) => e.message).join(', '), 'error')
+    else showToast('Canvis desats.')
   }
 
   return (
@@ -110,7 +109,6 @@ export default function HabilitatorPanel({ habilitator, knownContacts, onClose, 
         {confirmDelete && (
           <Alert status="warning" message={`S'eliminarà «${habilitator.name}» i totes les seves relacions.`} />
         )}
-        {message && <Alert status={message.status} message={message.text} />}
 
         <Input label="Nom complet" value={name} onChange={setName} required />
         <Input
@@ -178,6 +176,11 @@ export default function HabilitatorPanel({ habilitator, knownContacts, onClose, 
             onClick={() => setAttributes([...attributes, ['', '']])}
           />
         </section>
+
+        <p className="last-edit">
+          Última modificació: {new Date(habilitator.updatedAt).toLocaleString('ca-ES', { dateStyle: 'short', timeStyle: 'short' })}
+          {habilitator.updatedBy && ` · ${habilitator.updatedBy}`}
+        </p>
       </div>
     </Drawer>
   )

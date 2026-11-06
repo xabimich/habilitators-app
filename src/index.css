@@ -241,3 +241,10 @@ body {
 .login-links:empty {
   display: none;
 }
+
+.last-edit {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-neutral-500);
+}

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { fetchUserAttributes, signOut } from 'aws-amplify/auth'
 import { client, kindLabel, RELATION_KINDS, STATUSES, TYPES, type Habilitator, type Relation } from './client'
-import { Alert, Button, Header, Input, Modal, Select, type Option } from './dss'
+import { Button, Header, Input, Modal, Select, type Option } from './dss'
+import { showToast } from './toast'
 import HabilitatorPanel from './HabilitatorPanel'
 import Canvas from './Canvas'
 
@@ -29,7 +30,6 @@ export default function App() {
   const [kind, setKind] = useState(RELATION_KINDS[0])
 
   const [relToDelete, setRelToDelete] = useState<Relation | null>(null)
-  const [modalError, setModalError] = useState('')
 
   useEffect(() => {
     // `name` is a standard Cognito attribute set by the admin; fall back to given + family name.
@@ -58,6 +58,7 @@ export default function App() {
 
   const byId = useMemo(() => new Map(habilitators.map((h) => [h.id, h])), [habilitators])
   const selected = selectedId ? byId.get(selectedId) : undefined
+  const editor = user.name || user.email
   const nameOf = (id: string) => byId.get(id)?.name ?? '(desconegut)'
 
   const knownContacts = useMemo(
@@ -93,17 +94,17 @@ export default function App() {
     setHabModal(false)
     setRelModal(false)
     setRelToDelete(null)
-    setModalError('')
   }
 
   async function createHabilitator() {
-    if (!newName.trim() || !newType) return setModalError('Cal indicar el nom i el tipus.')
+    if (!newName.trim() || !newType) return showToast('Cal indicar el nom i el tipus.', 'error')
     const { data, errors } = await client.models.Habilitator.create({
       name: newName.trim(),
       shortName: newShortName.trim() || null,
       type: newType,
+      updatedBy: editor,
     })
-    if (errors) return setModalError(errorText(errors))
+    if (errors) return showToast(errorText(errors), 'error')
     setNewName('')
     setNewShortName('')
     setNewType('')
@@ -112,10 +113,10 @@ export default function App() {
   }
 
   async function createRelation() {
-    if (!sourceId || !targetId || !kind) return setModalError("Cal indicar l'origen, el tipus i el destí.")
-    if (sourceId === targetId) return setModalError("L'origen i el destí han de ser diferents.")
+    if (!sourceId || !targetId || !kind) return showToast("Cal indicar l'origen, el tipus i el destí.", 'error')
+    if (sourceId === targetId) return showToast("L'origen i el destí han de ser diferents.", 'error')
     const { errors } = await client.models.Relation.create({ sourceId, targetId, kind })
-    if (errors) return setModalError(errorText(errors))
+    if (errors) return showToast(errorText(errors), 'error')
     setSourceId('')
     setTargetId('')
     closeModals()
@@ -124,7 +125,7 @@ export default function App() {
   async function deleteRelation() {
     if (!relToDelete) return
     const { errors } = await client.models.Relation.delete({ id: relToDelete.id })
-    if (errors) return setModalError(errorText(errors))
+    if (errors) return showToast(errorText(errors), 'error')
     closeModals()
   }
 
@@ -228,7 +229,6 @@ export default function App() {
             onEnter={createHabilitator}
           />
           <Select label="Tipus" placeholder="Tria un tipus" value={newType} options={typeOptions} onChange={setNewType} required />
-          {modalError && <Alert status="error" message={modalError} />}
         </div>
       </Modal>
 
@@ -247,7 +247,6 @@ export default function App() {
           <Select label="Origen" placeholder="Tria l'origen" value={sourceId} options={habOptions} onChange={setSourceId} required />
           <Select label="Tipus de relació" value={kind} options={kindOptions} onChange={setKind} required />
           <Select label="Destí" placeholder="Tria el destí" value={targetId} options={habOptions} onChange={setTargetId} required />
-          {modalError && <Alert status="error" message={modalError} />}
         </div>
       </Modal>
 
@@ -268,7 +267,6 @@ export default function App() {
             {kindLabel(relToDelete.kind)} <strong>{nameOf(relToDelete.targetId)}</strong>?
           </p>
         )}
-        {modalError && <Alert status="error" message={modalError} />}
       </Modal>
 
       {selected && (
@@ -276,6 +274,7 @@ export default function App() {
           key={selected.id}
           habilitator={selected}
           knownContacts={knownContacts}
+          editor={editor}
           onClose={() => setSelectedId(null)}
           onDelete={() => deleteHabilitator(selected.id)}
         />

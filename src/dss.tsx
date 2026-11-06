@@ -26,6 +26,7 @@ declare module 'react' {
       'dss-select': DssProps
       'dss-spinner': DssProps
       'dss-textarea': DssProps
+      'dss-toast': DssProps
     }
   }
 }
@@ -221,3 +222,4 @@ export function Header({
     </dss-header>
   )
 }
+
