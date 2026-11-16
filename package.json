@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seed:process": "node --no-warnings process/seed.ts"
   },
   "dependencies": {
     "@salut/design-system-salut": "^3.1.7",
@@ -27,6 +28,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "oxlint": "^1.89.0",
     "typescript": "~7.0.2",
-    "vite": "^8.3.5"
+    "vite": "^8.3.5",
+    "yaml": "^2.9.1"
   }
 }

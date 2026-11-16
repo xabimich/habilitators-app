@@ -97,7 +97,7 @@ function Login() {
   return (
     <div className="login">
       <div className="login-card dss-elevation--md">
-        <p className="dss-headline--sm">Plataforma Oberta</p>
+        <p className="dss-headline--sm">Informàtica Clínica</p>
 
         {step === 'signIn' && (
           <>

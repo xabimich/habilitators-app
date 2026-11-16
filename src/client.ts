@@ -37,3 +37,21 @@ const KIND_LABELS: Record<string, string> = {
 }
 
 export const kindLabel = (kind: string) => KIND_LABELS[kind] ?? kind
+
+// ---------- Standard work process (read-only; seeded from process/*.yaml) ----------
+
+export type Process = Schema['Process']['type']
+export type Phase = Schema['Phase']['type']
+export type Step = Schema['Step']['type']
+export type Gate = Schema['Gate']['type']
+export type Transition = Schema['Transition']['type']
+
+export const GATE_LABELS: Record<string, { short: string; long: string }> = {
+  dor: { short: 'DoR', long: 'Definition of Ready' },
+  dod: { short: 'DoD', long: 'Definition of Done' },
+}
+
+export const TRANSITION_LABELS: Record<string, string> = {
+  return: 'Retorn',
+  loop: 'Cicle',
+}

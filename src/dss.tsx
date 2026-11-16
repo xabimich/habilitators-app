@@ -13,8 +13,11 @@ declare module 'react' {
     interface IntrinsicElements {
       'dss-alert': DssProps
       'dss-avatar': DssProps
+      'dss-badge': DssProps
       'dss-button': DssProps
+      'dss-card': DssProps
       'dss-chip': DssProps
+      'dss-decorative-icon': DssProps
       'dss-drawer': DssProps
       'dss-header': DssProps
       'dss-header-menu-professional': DssProps
@@ -166,6 +169,46 @@ export function IconButton({ label, icon, onClick }: { label: string; icon: stri
 export function Chip({ label, onDelete }: { label: string; onDelete?: () => void }) {
   const ref = useListener('delete', onDelete)
   return <dss-chip ref={ref} label={label} hasDelete={!!onDelete} disableSelect size="sm" />
+}
+
+export type BadgeStatus = 'info' | 'neutral' | 'ideal' | 'alert'
+
+export function Badge({ label, status = 'neutral', icon }: { label: string; status?: BadgeStatus; icon?: string }) {
+  return <dss-badge label={label} status={status} icon={icon} hideIcon={!icon} size="sm" />
+}
+
+export function DecorativeIcon({ icon, size = 'lg' }: { icon: string; size?: 'sm' | 'md' | 'lg' | 'xl' }) {
+  return <dss-decorative-icon icon={icon} size={size} />
+}
+
+// Clickable card (the whole card, including Enter on its focusable surface).
+export function Card({
+  header,
+  footer,
+  children,
+  onClick,
+}: {
+  header: ReactNode
+  footer?: ReactNode
+  children: ReactNode
+  onClick: () => void
+}) {
+  const ref = useListener('click', onClick)
+  const keyRef = useListener<KeyboardEvent>('keydown', (e) => {
+    if (e.key === 'Enter') onClick()
+  })
+  return (
+    <dss-card
+      ref={(el: HTMLElement | null) => {
+        ref.current = el
+        keyRef.current = el
+      }}
+    >
+      <div slot="header">{header}</div>
+      <div slot="body">{children}</div>
+      {footer && <div slot="footer">{footer}</div>}
+    </dss-card>
+  )
 }
 
 export function Alert({ status, message }: { status: 'info' | 'success' | 'warning' | 'error'; message: string }) {

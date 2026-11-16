@@ -189,6 +189,389 @@ body {
   color: var(--layer);
 }
 
+/* ---------- home ---------- */
+
+.home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--dss-spacing-xl);
+  padding: var(--dss-spacing-xxl, 48px) var(--dss-spacing-lg);
+}
+
+.home-intro {
+  text-align: center;
+}
+
+.home-intro h1,
+.home-intro p {
+  margin: 0 0 var(--dss-spacing-xs);
+}
+
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 400px));
+  justify-content: center;
+  gap: var(--dss-spacing-lg);
+  width: 100%;
+}
+
+.home-cards dss-card {
+  cursor: pointer;
+}
+
+.home-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--dss-spacing-sm);
+}
+
+.home-card-header h2,
+.home-cards p {
+  margin: 0;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--dss-spacing-xs);
+  padding-top: var(--dss-spacing-md);
+  color: var(--color-neutral-500);
+}
+
+.breadcrumb .dss-subtitle--md {
+  color: var(--color-neutral-900);
+}
+
+/* ---------- process (Procés de treball) ---------- */
+
+.canvas--process {
+  overflow: auto;
+}
+
+.process {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dss-spacing-sm);
+  padding: var(--dss-spacing-md) 0;
+  box-sizing: border-box;
+}
+
+.process > :not(.process-scroll) {
+  margin-left: var(--dss-spacing-md);
+  margin-right: var(--dss-spacing-md);
+}
+
+.process-picker dss-select {
+  width: 280px;
+}
+
+.process-description {
+  margin: 0;
+  max-width: 80ch;
+  color: var(--color-neutral-700);
+}
+
+/* Scrolls sideways only when the widest row doesn't fit at the minimum card width. */
+.process-scroll {
+  overflow-x: auto;
+}
+
+/* One block per phase, stacked; the gap holds the arrows that go from one row to another. */
+.process-flow {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  width: max-content;
+}
+
+.phase-block {
+  width: max-content;
+  min-width: 240px;
+}
+
+.phase-0 { --phase: var(--color-primary-500); --phase-bg: var(--color-primary-50); }
+.phase-1 { --phase: var(--color-purple-500); --phase-bg: var(--color-purple-50); }
+.phase-2 { --phase: var(--color-green-600); --phase-bg: var(--color-green-50); }
+
+.phase-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--dss-spacing-sm);
+  padding: var(--dss-spacing-xs) var(--dss-spacing-sm);
+  background: var(--phase-bg);
+  border-top: 4px solid var(--phase);
+  border-radius: var(--dss-radius-xs);
+  color: var(--phase);
+}
+
+.phase-header span {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.phase-header small {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+  white-space: nowrap;
+}
+
+.phase-row {
+  display: grid;
+}
+
+/* Cards, gates and cycle steps are buttons: reset, then style. */
+.step,
+.gate,
+.cycle-title,
+.cycle-step {
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--color-neutral-900);
+}
+
+.step,
+.gate,
+.cycle-step {
+  background: var(--color-white);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--dss-radius-xs);
+}
+
+.step:focus-visible,
+.gate:focus-visible,
+.cycle-title:focus-visible,
+.cycle-step:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* All cards of a row share its height; the aim takes whatever is left. */
+.step {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dss-spacing-xxs);
+  min-height: 112px;
+  padding: var(--dss-spacing-xs) var(--dss-spacing-xs) var(--dss-spacing-sm);
+  border-top: 4px solid var(--phase);
+  box-shadow: var(--dss-elevation-sm);
+}
+
+button.step:hover,
+.cycle-step:hover {
+  border-color: var(--phase);
+}
+
+.step.optional {
+  border-style: dashed;
+  border-top-style: solid;
+  background: var(--color-neutral-50);
+}
+
+.step.selected,
+.gate.selected,
+.cycle-step.selected {
+  box-shadow: 0 0 0 2px var(--color-primary-500);
+}
+
+.step-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 20px;
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-white);
+  background: var(--phase);
+}
+
+.step-name {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  hyphens: auto;
+}
+
+.step-aim {
+  flex: 1;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-neutral-700);
+  hyphens: auto;
+}
+
+/* A step made of a repeated cycle (sprints): one line per repetition. */
+.step--cycle {
+  gap: 0;
+  cursor: default;
+}
+
+.cycle-title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dss-spacing-xxs);
+  padding: 0;
+  margin-bottom: var(--dss-spacing-xs);
+  background: none;
+  border: 0;
+}
+
+.cycle-row {
+  display: grid;
+  align-items: center;
+  column-gap: var(--dss-spacing-sm);
+  margin-bottom: 14px;
+}
+
+.cycle-iteration {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--phase);
+}
+
+.cycle-step {
+  min-height: 28px;
+  padding: 2px var(--dss-spacing-xxs);
+  font-size: 11px;
+  line-height: 13px;
+  text-align: center;
+  background: var(--phase-bg);
+}
+
+/* Marks that the cycle goes on with as many repetitions as needed. */
+.cycle-more {
+  justify-self: center;
+  padding: 0 var(--dss-spacing-xs);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--color-purple-500);
+  border: 1px dashed var(--color-purple-500);
+  border-radius: var(--dss-radius-xs);
+}
+
+/* Gate: a narrow post at the ends of a row, drawn over the arrows so the flow passes through it. */
+.gate {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--dss-spacing-xs);
+  padding: var(--dss-spacing-xs) 0;
+  background: var(--phase-bg);
+  border: 1px dashed var(--phase);
+  color: var(--phase);
+}
+
+.gate strong {
+  font-size: 11px;
+}
+
+.gate span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 100%;
+  color: var(--color-neutral-700);
+}
+
+.process-arrows {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.arrow {
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.arrow-forward { stroke: var(--color-neutral-500); }
+.arrow-bypass { stroke: var(--color-neutral-400); stroke-dasharray: 4 4; }
+.arrow-return { stroke: var(--color-orange-500); stroke-dasharray: 6 4; }
+.arrow-loop { stroke: var(--color-purple-500); stroke-dasharray: 6 4; }
+
+.marker-forward { fill: var(--color-neutral-500); }
+.marker-return { fill: var(--color-orange-500); }
+.marker-loop { fill: var(--color-purple-500); }
+
+.arrow-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  paint-order: stroke;
+  stroke: var(--color-white);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.arrow-label-return { fill: var(--color-orange-600); }
+.arrow-label-loop { fill: var(--color-purple-500); }
+
+.process-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dss-spacing-md);
+  font-size: 12px;
+  color: var(--color-neutral-600);
+}
+
+.process-legend span::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  margin-right: var(--dss-spacing-xxs);
+  vertical-align: middle;
+  border-top: 2px solid var(--color-neutral-500);
+}
+
+.process-legend .legend-bypass::before { border-top: 2px dashed var(--color-neutral-400); }
+.process-legend .legend-return::before { border-top: 2px dashed var(--color-orange-500); }
+.process-legend .legend-loop::before { border-top: 2px dashed var(--color-purple-500); }
+
+/* Side panel (read-only). */
+.form ul,
+.form ol {
+  margin: 0;
+  padding-left: var(--dss-spacing-md);
+}
+
+.form .pending {
+  font-style: italic;
+  color: var(--color-neutral-500);
+}
+
+.transitions li + li {
+  margin-top: var(--dss-spacing-xxs);
+}
+
 /* ---------- login ---------- */
 
 .login {

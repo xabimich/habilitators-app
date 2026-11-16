@@ -1,0 +1,191 @@
+# Standard process for building a digital asset (source: "fases construcció actiu digital.xlsx").
+# Loaded with `node process/seed.ts` (idempotent). Keys are stable ids: renaming a key creates a new
+# item and removes the old one; changing names or texts just updates it.
+#
+# Steps run in the listed order (forward flow is implicit). Only return/loop transitions are listed.
+# A step with `cycle` repeats its sub-steps (iterations = repetitions shown on screen).
+# Empty fields (actors, referent, deliverables, time) are still to be filled in.
+
+key: desenvolupament
+name: Construcció d'un actiu digital
+description: >-
+  Procés estàndard des de la descoberta fins a la transferència a adopció i el manteniment evolutiu.
+
+phases:
+  - key: descoberta
+    name: Descoberta
+    gates:
+      dor:
+        name: Inici de la descoberta
+        criteria: []
+      dod:
+        name: Descoberta tancada
+        criteria: []
+    steps:
+      - key: visio
+        name: Visió
+        aim: Desk research de la informació prèvia disponible per plantejar l'estratègia.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: cocreacio
+        name: Cocreació
+        aim: Tallers per alinear el procés assistencial amb les funcionalitats de l'actiu digital.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: estrategia-producte
+        name: Estratègia de producte
+        aim: Convertir les funcionalitats en una estratègia de producte que encaixi amb l'actual.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: contractacio
+        name: Contractació / Operació
+        aim: "Decidir com es construeix: evolutius, lots o una nova licitació."
+        actors: []
+        referent:
+        deliverables: []
+        time:
+
+  - key: desenvolupament
+    name: Desenvolupament
+    gates:
+      dor:
+        name: Definition of Ready
+        criteria: []
+      dod:
+        # Was the "DoD" column in the spreadsheet.
+        name: Definition of Done
+        criteria:
+          - Producte acabat.
+    steps:
+      - key: refinament
+        name: Refinament
+        aim: Refinar les funcionalitats del MVP i tancar el disseny de la solució.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: arquitectura
+        name: Arquitectura i model de dades
+        aim: Definir l'arquitectura i el model de dades del MVP.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: desenvolupament-mvp
+        name: Dev MVP
+        aim: El proveïdor desenvolupa el MVP amb metodologia waterfall.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: proves-internes
+        name: Proves internes
+        aim: El proveïdor prova a fons el MVP per assegurar-ne la robustesa.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: uats
+        name: UATs
+        aim: L'equip fa les proves d'acceptació funcional.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: pro-mvp
+        name: PRO MVP
+        aim: Pujada del MVP a producció.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: pilot
+        name: Pilot
+        aim: Pilot en una àrea seleccionada per acompanyar els increments de producte.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+      - key: increments
+        name: Increments de producte (sprints)
+        aim: "Cicles curts (Agile): descoberta ràpida, sprint i acceptació, amb tants sprints com calgui."
+        actors: []
+        referent:
+        deliverables: []
+        time:
+        cycle:
+          iterations: 2 # sprints shown on screen; more can follow (× n)
+          steps:
+            - key: descoberta-rapida
+              name: Descoberta ràpida
+              aim: Concretar amb els usuaris del pilot què ha d'aportar l'increment.
+              actors: []
+              referent:
+              deliverables: []
+              time:
+            - key: sprint
+              name: Sprint
+              aim: Desenvolupar l'increment en un sprint curt.
+              actors: []
+              referent:
+              deliverables: []
+              time:
+            - key: acceptacio
+              name: Acceptació
+              aim: Revisar i acceptar l'increment abans del següent sprint.
+              actors: []
+              referent:
+              deliverables: []
+              time:
+      - key: transferencia-adopcio
+        name: Transferència a adopció
+        aim: Traspàs a adopció per decidir formació, gestió del canvi i estratègia d'implantació.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+
+  - key: evolucio
+    name: Evolució
+    steps:
+      - key: backlog
+        name: Backlog
+        aim: Recollir en un backlog les millores que sorgeixen durant el funcionament.
+        actors: []
+        referent:
+        deliverables: []
+        time:
+
+transitions:
+  - from: estrategia-producte
+    to: cocreacio
+    kind: return
+    label: Cal refinar
+  - from: proves-internes
+    to: desenvolupament-mvp
+    kind: return
+    label: Errors
+  - from: uats
+    to: desenvolupament-mvp
+    kind: return
+    label: Rebuig
+  - from: pilot
+    to: increments
+    kind: return
+    label: Noves necessitats
+  # Inside the sprint cycle: after acceptance, the next sprint starts straight away (its quick discovery
+  # runs in parallel). The screen uses this to draw where each new repetition picks up.
+  - from: acceptacio
+    to: sprint
+    kind: loop
+    label: Següent sprint
+  - from: backlog
+    to: increments
+    kind: loop
+    label: Nou increment
