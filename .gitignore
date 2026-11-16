@@ -39,3 +39,6 @@ amplifyconfiguration*
 CLAUDE.md
 .claude/
 scripts/
+
+# Local only: groups generated from a spreadsheet (scripts/groups.py), bundled at build
+src/groups.local.json
