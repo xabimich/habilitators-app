@@ -1,7 +1,7 @@
 // Landing page after login: pick one of the tools.
 import { Button, Card, DecorativeIcon } from './dss'
 
-export type Section = { id: string; title: string; icon: string; description: string }
+export type Section = { id: string; title: string; icon: string; description: string; action?: string }
 
 export default function Home({ sections, onOpen }: { sections: Section[]; onOpen: (id: string) => void }) {
   return (
@@ -21,7 +21,7 @@ export default function Home({ sections, onOpen }: { sections: Section[]; onOpen
                 <h2 className="dss-subtitle--xl">{s.title}</h2>
               </div>
             }
-            footer={<Button label="Entra" icon="arrow_forward" onClick={() => {}} />}
+            footer={<Button label={s.action ?? 'Entra'} icon="arrow_forward" onClick={() => {}} />}
           >
             <p className="dss-body--md">{s.description}</p>
           </Card>

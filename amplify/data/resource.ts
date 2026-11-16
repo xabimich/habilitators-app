@@ -58,7 +58,8 @@ const schema = a.schema({
       // and iterations is how many repetitions the screen shows.
       parentStepId: a.id(),
       iterations: a.integer(),
-      aim: a.string(),
+      aim: a.string(), // short, shown on the card
+      aimDescription: a.string(), // longer explanation of the aim, shown only in the side panel
       deliverables: a.string().array(),
       actors: a.string().array(),
       referent: a.string(),

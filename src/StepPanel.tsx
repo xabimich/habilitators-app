@@ -1,4 +1,4 @@
-// Read-only side panel for a process step (aim, actors, referent, deliverables, time, transitions)
+// Read-only side panel for a process step (aim and its longer description, actors, referent, deliverables, time, transitions)
 // or a gate (DoR/DoD criteria).
 import type { ReactNode } from 'react'
 import { GATE_LABELS, TRANSITION_LABELS, type Gate, type Phase, type Step, type Transition } from './client'
@@ -29,7 +29,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 const Pending = () => <p className="pending dss-body--md">Pendent de definir</p>
 
 function TextField({ label, value }: { label: string; value: string | null | undefined }) {
-  return <Field label={label}>{value ? <p className="dss-body--md">{value}</p> : <Pending />}</Field>
+  return <Field label={label}>{value ? <p className="text dss-body--md">{value}</p> : <Pending />}</Field>
 }
 
 function ListField({ label, values, chips }: { label: string; values: string[]; chips?: boolean }) {
@@ -123,6 +123,7 @@ export default function StepPanel({ selection, phases, steps, transitions, onSel
           {s.optional && <Badge label="Opcional" status="neutral" />}
         </div>
         <TextField label="Objectiu" value={s.aim} />
+        <TextField label="Descripció" value={s.aimDescription} />
         {children.length > 0 && (
           <Field label={`Cicle (es mostren ${s.iterations ?? 1} repeticions, se n'hi poden afegir més)`}>
             <ol className="dss-body--md">

@@ -39,6 +39,7 @@ type StepYaml = {
   name: string
   optional?: boolean
   aim?: string | null
+  description?: string | null // longer aim, side panel only
   actors?: string[] | null
   referent?: string | null
   deliverables?: string[] | null
@@ -126,6 +127,7 @@ function buildItems(doc: ProcessYaml): Record<string, Item[]> {
         parentStepId: parent ? id('step', parent.key) : null,
         iterations: cycle ? (cycle.iterations ?? 3) : null,
         aim: text(step.aim),
+        aimDescription: text(step.description),
         actors: list(step.actors),
         referent: text(step.referent),
         deliverables: list(step.deliverables),

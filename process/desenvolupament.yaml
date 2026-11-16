@@ -4,7 +4,9 @@
 #
 # Steps run in the listed order (forward flow is implicit). Only return/loop transitions are listed.
 # A step with `cycle` repeats its sub-steps (iterations = repetitions shown on screen).
-# Empty fields (actors, referent, deliverables, time) are still to be filled in.
+# Empty fields (description, actors, referent, deliverables, time) are still to be filled in.
+# aim is the short text on the card (~80 chars); description is the longer one, side panel only
+# (use `description: >-` and indented lines for several lines of text).
 
 key: desenvolupament
 name: Construcció d'un actiu digital
@@ -24,14 +26,21 @@ phases:
     steps:
       - key: visio
         name: Visió
-        aim: Desk research de la informació prèvia disponible per plantejar l'estratègia.
+        aim: Desk research de la informació prèvia disponible per plantejar l'estratègia i plantejar la mesura de l'impacte assistencial.
+        description: Aquí implica recopilar si ja hi ha altres solucions internes o externes
+         que resolen el cas d'ús i l'alineament amb la cocreació d'actius digitals inicial. Plantejar com mesuraràs l'impacte
+         d'aquest actiu digital. 
         actors: []
         referent:
         deliverables: []
         time:
       - key: cocreacio
         name: Cocreació
-        aim: Tallers per alinear el procés assistencial amb les funcionalitats de l'actiu digital.
+        aim: Tallers per alinear el procés assistencial amb les funcionalitats de l'actiu digital. Explorar
+         les necessitats de coneixement clínic.
+        description: Tallers amb els professionals del SISCAT implicats en els processos assistencials
+         al que dóna suport l'actiu digital. Començar a mapejar les necessitats de coneixement clínic i plantejar
+         el consens si necessari. 
         actors: []
         referent:
         deliverables: []
@@ -39,6 +48,9 @@ phases:
       - key: estrategia-producte
         name: Estratègia de producte
         aim: Convertir les funcionalitats en una estratègia de producte que encaixi amb l'actual.
+        description: Aquesta fase també pot incloure fer un primer disseny de la experiència d'usuari
+         i un disseny de la solució a partir de les funcionalitats. Es té en compte el que ja hi ha desplegat.
+         Es poden fer testos d'usuari amb prototip segons necessitat. 
         actors: []
         referent:
         deliverables: []
@@ -46,6 +58,8 @@ phases:
       - key: contractacio
         name: Contractació / Operació
         aim: "Decidir com es construeix: evolutius, lots o una nova licitació."
+        description: Aquí és triar el canal i el suport necessari per convertir la descoberta en un 
+          PPT d'una licitació o la documentació necessària per passar a la construcció. 
         actors: []
         referent:
         deliverables: []
@@ -64,8 +78,10 @@ phases:
           - Producte acabat.
     steps:
       - key: refinament
-        name: Refinament
+        name: Refinament i validació
         aim: Refinar les funcionalitats del MVP i tancar el disseny de la solució.
+        description: Ajustar amb una descoberta exprés i tancar el disseny de la experiència d'usuari i de 
+          interfaç. Es realitza validació amb professionals. 
         actors: []
         referent:
         deliverables: []
@@ -73,6 +89,8 @@ phases:
       - key: arquitectura
         name: Arquitectura i model de dades
         aim: Definir l'arquitectura i el model de dades del MVP.
+        description: Definir amb detall l'arquitectura tècnica per donar resposta a les funcionalitats
+         utilitzant els habilitadors de plataforma oberta i els artefactes openEHR per al model de dades.
         actors: []
         referent:
         deliverables: []
@@ -80,6 +98,7 @@ phases:
       - key: desenvolupament-mvp
         name: Dev MVP
         aim: El proveïdor desenvolupa el MVP amb metodologia waterfall.
+        description: Cal que es marquin unes fites. 
         actors: []
         referent:
         deliverables: []
@@ -87,6 +106,8 @@ phases:
       - key: proves-internes
         name: Proves internes
         aim: El proveïdor prova a fons el MVP per assegurar-ne la robustesa.
+        description: Cal que es plantegin proves intenses per facilitar que les UATs realment 
+          siguin per validar funcionalitats. 
         actors: []
         referent:
         deliverables: []
@@ -94,6 +115,7 @@ phases:
       - key: uats
         name: UATs
         aim: L'equip fa les proves d'acceptació funcional.
+        description: Aquestes proves han d'haver estat definides prèviament. 
         actors: []
         referent:
         deliverables: []
@@ -101,6 +123,7 @@ phases:
       - key: pro-mvp
         name: PRO MVP
         aim: Pujada del MVP a producció.
+        description:
         actors: []
         referent:
         deliverables: []
@@ -108,6 +131,7 @@ phases:
       - key: pilot
         name: Pilot
         aim: Pilot en una àrea seleccionada per acompanyar els increments de producte.
+        description: Es fa test en entorn real de l'actiu digital amb usuaris finals. 
         actors: []
         referent:
         deliverables: []
@@ -115,6 +139,7 @@ phases:
       - key: increments
         name: Increments de producte (sprints)
         aim: "Cicles curts (Agile): descoberta ràpida, sprint i acceptació, amb tants sprints com calgui."
+        description:
         actors: []
         referent:
         deliverables: []
@@ -125,6 +150,7 @@ phases:
             - key: descoberta-rapida
               name: Descoberta ràpida
               aim: Concretar amb els usuaris del pilot què ha d'aportar l'increment.
+              description:
               actors: []
               referent:
               deliverables: []
@@ -132,6 +158,7 @@ phases:
             - key: sprint
               name: Sprint
               aim: Desenvolupar l'increment en un sprint curt.
+              description:
               actors: []
               referent:
               deliverables: []
@@ -139,6 +166,7 @@ phases:
             - key: acceptacio
               name: Acceptació
               aim: Revisar i acceptar l'increment abans del següent sprint.
+              description:
               actors: []
               referent:
               deliverables: []
@@ -146,6 +174,7 @@ phases:
       - key: transferencia-adopcio
         name: Transferència a adopció
         aim: Traspàs a adopció per decidir formació, gestió del canvi i estratègia d'implantació.
+        description:
         actors: []
         referent:
         deliverables: []
@@ -157,6 +186,7 @@ phases:
       - key: backlog
         name: Backlog
         aim: Recollir en un backlog les millores que sorgeixen durant el funcionament.
+        description:
         actors: []
         referent:
         deliverables: []

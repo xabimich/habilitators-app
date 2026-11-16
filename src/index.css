@@ -212,13 +212,21 @@ body {
 .home-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 400px));
+  grid-auto-rows: 1fr; /* every card as tall as the tallest, also when they wrap */
   justify-content: center;
   gap: var(--dss-spacing-lg);
   width: 100%;
 }
 
+/* display: grid stretches the card's inner box to the host's full height. */
 .home-cards dss-card {
+  display: grid;
   cursor: pointer;
+}
+
+/* The description takes the spare height, so the buttons line up at the bottom. */
+.home-cards [slot='body'] {
+  flex: 1;
 }
 
 .home-card-header {
@@ -618,4 +626,30 @@ button.step:hover,
   font-size: 12px;
   line-height: 16px;
   color: var(--color-neutral-500);
+}
+
+/* ---------- Working groups modal ---------- */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--color-neutral-300, #d6d6d6);
+  border-radius: 8px;
+}
+
+.group--mine {
+  border-color: var(--color-primary-600, #0b5cd5);
+  background: var(--color-primary-50, #eef4fd);
+}
+
+.form .group-members {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* Keep the line breaks of longer texts from the YAML (e.g. the aim description). */
+.form .text {
+  white-space: pre-line;
 }

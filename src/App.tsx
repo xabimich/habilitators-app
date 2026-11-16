@@ -7,6 +7,7 @@ import HabilitatorPanel from './HabilitatorPanel'
 import Canvas from './Canvas'
 import ProcessView from './Process'
 import Home, { type Section } from './Home'
+import GroupsModal from './Groups'
 
 // Sections offered on the home page; each one lives at its own URL hash.
 const SECTIONS: (Section & { hash: string })[] = [
@@ -29,6 +30,14 @@ const SECTIONS: (Section & { hash: string })[] = [
       "portes d'entrada i sortida (DoR/DoD), retorns i cicles de sprints. Consulta l'objectiu de cada pas.",
   },
 ]
+// Home card that opens a modal instead of a section.
+const GROUPS_CARD: Section = {
+  id: 'groups',
+  title: 'Grups de treball',
+  icon: 'groups',
+  action: 'Mostra',
+  description: 'Consulta en quin grup de treball ets i qui en forma part.',
+}
 const sectionFromHash = () => SECTIONS.find((s) => s.hash === location.hash)?.id ?? 'home'
 
 const errorText = (errors: { message: string }[]) => errors.map((e) => e.message).join(', ')
@@ -40,6 +49,7 @@ export default function App() {
   const [loaded, setLoaded] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [view, setView] = useState(sectionFromHash)
+  const [groupsOpen, setGroupsOpen] = useState(false)
 
   const [typeFilter, setTypeFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
@@ -121,6 +131,7 @@ export default function App() {
 
   // Each section has its own history entry, so the browser's back button returns to the home page.
   function open(id: string) {
+    if (id === GROUPS_CARD.id) return setGroupsOpen(true)
     const hash = SECTIONS.find((s) => s.id === id)?.hash
     history.pushState(null, '', hash ?? location.pathname + location.search)
     setView(hash ? id : 'home')
@@ -183,7 +194,7 @@ export default function App() {
       <Header title="Informàtica Clínica" name={user.name} email={user.email} onSignOut={() => signOut()} />
 
       {!section ? (
-        <Home sections={SECTIONS} onOpen={open} />
+        <Home sections={[...SECTIONS, GROUPS_CARD]} onOpen={open} />
       ) : (
         <div className="content">
           <nav className="breadcrumb dss-body--md" aria-label="Ruta">
@@ -287,6 +298,8 @@ export default function App() {
           <Select label="Tipus" placeholder="Tria un tipus" value={newType} options={typeOptions} onChange={setNewType} required />
         </div>
       </Modal>
+
+      <GroupsModal open={groupsOpen} email={user.email} onClose={() => setGroupsOpen(false)} />
 
       <Modal
         open={relModal}
