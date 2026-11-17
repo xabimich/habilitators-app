@@ -3,13 +3,23 @@
 // and is bundled at build time. Users not in any group (or without that file) see no groups at all.
 // Emails are stored as SHA-256 hashes, so the user's email is hashed to find their group.
 import { useEffect, useState } from 'react'
-import { Alert, Link, Modal } from './dss'
+import { Alert, Button, Modal } from './dss'
 
 type Member = { name: string; emailHash: string }
 type Group = { name: string; link?: string | null; members: Member[] }
 
 const files = import.meta.glob<{ groups: Group[] }>('./groups.local.json', { eager: true, import: 'default' })
 const GROUPS: Group[] = Object.values(files)[0]?.groups ?? []
+
+// Miro board of each group (from links_grups.xlsx); a "link" in groups.local.json takes precedence.
+const MIRO = 'https://miro.com/app/board/uXjVENHUX6k=/?cot=14&moveToWidget='
+const LINKS: Record<string, string> = {
+  'Grup 1': MIRO + '3458764690613511344',
+  'Grup 2': MIRO + '3458764690615761569',
+  'Grup 3': MIRO + '3458764690613896671',
+  'Grup 4': MIRO + '3458764690613896022',
+  'Grup 5': MIRO + '3458764690615987649',
+}
 
 async function sha256(text: string) {
   const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text.trim().toLowerCase()))
@@ -27,7 +37,8 @@ function Members({ group, me }: { group: Group; me?: string }) {
 }
 
 function GroupLink({ group }: { group: Group }) {
-  return group.link ? <Link label="Obre l'espai del grup" onClick={() => window.open(group.link!, '_blank')} /> : null
+  const link = group.link || LINKS[group.name]
+  return link ? <Button label="Ves al Miro del grup" onClick={() => window.open(link, '_blank', 'noopener')} /> : null
 }
 
 export default function GroupsModal({ open, email, onClose }: { open: boolean; email: string; onClose: () => void }) {

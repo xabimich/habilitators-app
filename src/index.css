@@ -633,7 +633,9 @@ button.step:hover,
 .group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
   padding: 12px;
   border: 1px solid var(--color-neutral-300, #d6d6d6);
   border-radius: 8px;
@@ -646,7 +648,8 @@ button.step:hover,
 
 .form .group-members {
   margin: 0;
-  padding-left: 18px;
+  padding: 0;
+  list-style: none;
 }
 
 /* Keep the line breaks of longer texts from the YAML (e.g. the aim description). */
